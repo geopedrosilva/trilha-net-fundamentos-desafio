@@ -1,59 +1,65 @@
-﻿using DesafioFundamentos.Models;
+using System;
+using System.Collections.Generic;
 
-// Coloca o encoding para UTF8 para exibir acentuação
-Console.OutputEncoding = System.Text.Encoding.UTF8;
-
-decimal precoInicial = 0;
-decimal precoPorHora = 0;
-
-Console.WriteLine("Seja bem vindo ao sistema de estacionamento!\n" +
-                  "Digite o preço inicial:");
-precoInicial = Convert.ToDecimal(Console.ReadLine());
-
-Console.WriteLine("Agora digite o preço por hora:");
-precoPorHora = Convert.ToDecimal(Console.ReadLine());
-
-// Instancia a classe Estacionamento, já com os valores obtidos anteriormente
-Estacionamento es = new Estacionamento(precoInicial, precoPorHora);
-
-string opcao = string.Empty;
-bool exibirMenu = true;
-
-// Realiza o loop do menu
-while (exibirMenu)
+namespace DesafioFundamentos.Models
 {
-    Console.Clear();
-    Console.WriteLine("Digite a sua opção:");
-    Console.WriteLine("1 - Cadastrar veículo");
-    Console.WriteLine("2 - Remover veículo");
-    Console.WriteLine("3 - Listar veículos");
-    Console.WriteLine("4 - Encerrar");
-
-    switch (Console.ReadLine())
+    public class Estacionamento
     {
-        case "1":
-            es.AdicionarVeiculo();
-            break;
+        private decimal precoInicial;
+        private decimal precoPorHora;
+        private List<string> veiculos = new List<string>();
 
-        case "2":
-            es.RemoverVeiculo();
-            break;
+        public Estacionamento(decimal precoInicial, decimal precoPorHora)
+        {
+            this.precoInicial = precoInicial;
+            this.precoPorHora = precoPorHora;
+        }
 
-        case "3":
-            es.ListarVeiculos();
-            break;
+        public void AdicionarVeiculo()
+        {
+            Console.WriteLine("Digite a placa do veículo:");
+            string placa = Console.ReadLine();
 
-        case "4":
-            exibirMenu = false;
-            break;
+            veiculos.Add(placa);
 
-        default:
-            Console.WriteLine("Opção inválida");
-            break;
+            Console.WriteLine("Veículo cadastrado com sucesso!");
+        }
+
+        public void RemoverVeiculo()
+        {
+            Console.WriteLine("Digite a placa do veículo:");
+            string placa = Console.ReadLine();
+
+            if (veiculos.Contains(placa))
+            {
+                Console.WriteLine("Quantas horas o veículo ficou estacionado?");
+                int horas = int.Parse(Console.ReadLine());
+
+                decimal valor = precoInicial + precoPorHora * horas;
+
+                Console.WriteLine("O valor cobrado foi de {0} reais", valor);
+
+                veiculos.Remove(placa);
+            }
+            else
+            {
+                Console.WriteLine("Veículo não encontrado");
+            }
+        }
+
+        public void ListarVeiculos()
+        {
+            if (veiculos.Count == 0)
+            {
+                Console.WriteLine("Não há veículos estacionados");
+            }
+            else
+            {
+                foreach (string placa in veiculos)
+                {
+                    Console.WriteLine(placa);
+                }
+            }
+        }
     }
-
-    Console.WriteLine("Pressione uma tecla para continuar");
-    Console.ReadLine();
 }
-
-Console.WriteLine("O programa se encerrou");
